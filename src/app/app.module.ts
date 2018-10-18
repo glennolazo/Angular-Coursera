@@ -1,10 +1,12 @@
+
 import { BrowserModule } from "@angular/platform-browser";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { NgModule } from "@angular/core";
 import { FormsModule } from "@angular/forms";
 import { ReactiveFormsModule } from "@angular/forms";
-
 import { HttpClientModule } from "@angular/common/http";
+import { AppRoutingModule } from "./app-routing/app-routing.module";
+
 import { FlexLayoutModule } from "@angular/flex-layout";
 import { MatToolbarModule } from "@angular/material/toolbar";
 import { MatListModule } from "@angular/material/list";
@@ -20,8 +22,6 @@ import { MatSlideToggleModule } from "@angular/material/slide-toggle";
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 import { MatSliderModule } from "@angular/material/slider";
 
-import { AppRoutingModule } from "./app-routing/app-routing.module";
-
 import { AppComponent } from "./app.component";
 import { LoginComponent } from "./login/login.component";
 import { MenuComponent } from "./menu/menu.component";
@@ -32,6 +32,7 @@ import { AboutComponent } from "./about/about.component";
 import { HomeComponent } from "./home/home.component";
 import { ContactComponent } from "./contact/contact.component";
 
+import { baseURL } from './shared/baseurl';
 import "hammerjs";
 
 @NgModule({
@@ -53,6 +54,7 @@ import "hammerjs";
     FlexLayoutModule,
     FormsModule,
     ReactiveFormsModule,
+    HttpClientModule,
     MatToolbarModule,
     MatListModule,
     MatGridListModule,
@@ -68,7 +70,9 @@ import "hammerjs";
     MatProgressSpinnerModule,
     AppRoutingModule
   ],
-  providers: [],
+  providers: [
+    {provide: 'BaseURL', useValue: baseURL}
+  ],
   entryComponents: [LoginComponent],
   bootstrap: [AppComponent]
 })
