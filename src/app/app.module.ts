@@ -31,9 +31,11 @@ import { FooterComponent } from "./footer/footer.component";
 import { AboutComponent } from "./about/about.component";
 import { HomeComponent } from "./home/home.component";
 import { ContactComponent } from "./contact/contact.component";
+import { HighlightDirective } from './directives/highlight.directive';
 
 import { baseURL } from './shared/baseurl';
 import "hammerjs";
+
 
 @NgModule({
   declarations: [
@@ -45,7 +47,8 @@ import "hammerjs";
     AboutComponent,
     HomeComponent,
     ContactComponent,
-    LoginComponent
+    LoginComponent,
+    HighlightDirective
   ],
   imports: [
     BrowserModule,
