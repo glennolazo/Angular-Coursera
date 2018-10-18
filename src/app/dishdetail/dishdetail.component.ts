@@ -1,5 +1,7 @@
+
 import { Component, OnInit, ViewChild, Inject } from "@angular/core";
 import { Dish } from "../shared/dish";
+import { Comment } from './../shared/comment';
 import { baseURL } from "../shared/baseurl";
 
 import { DishService } from "../services/dish.service";
@@ -21,6 +23,7 @@ export class DishdetailComponent implements OnInit {
   prev: string;
   next: string;
   errMess: string;
+  dishcopy: Dish;
   @ViewChild("cform")
   commentFormDirective;
 
@@ -48,6 +51,7 @@ export class DishdetailComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.createForm();
     this.dishService
       .getDishIds()
       .subscribe(dishIds => (this.dishIds = dishIds));
@@ -58,11 +62,11 @@ export class DishdetailComponent implements OnInit {
       .subscribe(
         dish => {
           this.dish = dish;
+          this.dishcopy = dish;
           this.setPrevNext(dish.id);
         },
         errmess => (this.errMess = <any>errmess)
       );
-    this.createForm();
   }
 
   setPrevNext(dishId: string) {
@@ -83,8 +87,7 @@ export class DishdetailComponent implements OnInit {
     this.commentForm = this.fb.group({
       author: ["", [Validators.required, Validators.minLength(2)]],
       comment: ["", [Validators.required]],
-      rating: "",
-      date: new Date()
+      rating: 5,
     });
 
     this.commentForm.valueChanges.subscribe(data => this.onValueChange(data));
@@ -92,14 +95,25 @@ export class DishdetailComponent implements OnInit {
 
   onSubmit() {
     this.comment = this.commentForm.value;
-    this.dish.comments.push(this.commentForm.value);
+    this.comment.date = new Date().toISOString();
+    this.dishcopy.comments.push(this.comment);
+    this.dishService.putDish(this.dishcopy)
+      .subscribe(dish => {
+        this.dish = dish;
+        this.dishcopy = dish;
+      },
+      errmess => {
+        this.dish = null; 
+        this.dishcopy = null; 
+        this.errMess = <any>errmess;
+      });
+    this.commentFormDirective.resetForm();
     this.commentForm.reset({
       name: "",
       comment: "",
-      rating: "",
-      date: ""
+      rating: 5,
     });
-    this.commentFormDirective.resetForm();
+    
   }
 
   onValueChange(data?: any) {
